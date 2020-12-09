@@ -1,0 +1,120 @@
+@import './_reset.scss';
+@import './_variables.scss';
+
+
+
+.l-container {
+  width: 100vw;
+  height: 100vh;
+  background: lightgreen;
+  position: relative;
+  overflow: hidden;
+}
+
+.c-panel {
+  position: absolute;
+  left: 0;
+  top: 75%;
+  width: 100%;
+  z-index: 10;
+  .background {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 900px;
+    width: calc(150%);
+    height: 300vw;
+    background: $color--primary;
+    z-index: -1;
+  }
+  .l-panel__btn-group {
+    width: 100%;
+    position: absolute;
+
+  }
+
+  .group--upper {
+    height: 120px;
+    top: -60px;
+    .c-btn {
+      position: absolute;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      border: 8px solid $color--primary;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  .btn--start {
+    left: 50%;
+    height: 120px;
+    width: 120px;
+    background: $color--secondary;
+    img {
+      width: 40px;
+      height: 50px;
+      margin-left: 10px;
+    }
+  }
+  .btn--prev,
+  .btn--next {
+    height: 80px;
+    width: 80px;
+    top: 45%;
+    background: $color--ternary;
+  }
+  .btn--prev {
+    left: 20%;
+  }
+  .btn--next {
+    left: 80%;
+  }
+
+  .group--center {
+    top: 80px;
+    height: 60px;
+    display:flex;
+    justify-content: center;
+    .c-btn {
+      height: 60px;
+      background-color: transparent;
+      border: none; 
+      width: 60px;
+      margin: 0 10px;
+    }
+  }
+
+
+}
+
+.c-progress {
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  background-color: #fff;
+  top: 160px;
+
+  .progress__bar {
+    position: absolute;
+    left: 0;
+    height: 100%;
+    background-color: $color--secondary;
+    width: 20%;
+  }
+  .progress__point {
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    background-color: $color--secondary;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: -15px;
+  }
+}
+
+  
+
+
