@@ -1,7 +1,12 @@
 @import './_reset.scss';
 @import './_variables.scss';
 
+$start-btn: 110px;
+$control-btn: 80px;
+$mode-btn: 30px;
 
+$menu-btn--large: 75px;
+$menu-btn: 30px;
 
 .l-container {
   width: 100vw;
@@ -16,7 +21,7 @@
   left: 0;
   top: 75%;
   width: 100%;
-  z-index: 10;
+  z-index: $z-panel;
   .background {
     position: absolute;
     left: 50%;
@@ -34,8 +39,8 @@
   }
 
   .group--upper {
-    height: 120px;
-    top: -60px;
+    height: $start-btn;
+    top: -($start-btn / 2);
     .c-btn {
       position: absolute;
       transform: translateX(-50%);
@@ -47,10 +52,11 @@
     }
   }
 
+
   .btn--start {
     left: 50%;
-    height: 120px;
-    width: 120px;
+    height: $start-btn;
+    width: $start-btn;
     background: $color--secondary;
     img {
       width: 40px;
@@ -60,8 +66,8 @@
   }
   .btn--prev,
   .btn--next {
-    height: 80px;
-    width: 80px;
+    height: $control-btn;
+    width: $control-btn;
     top: 45%;
     background: $color--ternary;
   }
@@ -74,15 +80,23 @@
 
   .group--center {
     top: 80px;
-    height: 60px;
+    height: $mode-btn;
     display:flex;
     justify-content: center;
     .c-btn {
-      height: 60px;
+      height: $mode-btn;
       background-color: transparent;
       border: none; 
-      width: 60px;
-      margin: 0 10px;
+      width: $mode-btn;
+      margin: 0 27px;
+      padding: 0;
+    }
+    img {
+      height: 100%;
+      width: 100%;
+    }
+    .c-btn[data-action="random"] {
+      height: 26px;
     }
   }
 
@@ -94,7 +108,7 @@
   width: 100%;
   height: 4px;
   background-color: #fff;
-  top: 160px;
+  top: 135px;
 
   .progress__bar {
     position: absolute;
@@ -112,6 +126,44 @@
     top: 50%;
     transform: translateY(-50%);
     right: -15px;
+  }
+
+}
+
+
+.l-menu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: $menu-btn--large;
+  display: flex;
+  align-items: center;
+  z-index: $z-panel;
+  .c-hamburger {
+    height: $menu-btn--large*2;
+    width: $menu-btn--large*2;
+    background-color: $color--primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    position: absolute;
+    top: -$menu-btn--large;
+    left: -$menu-btn--large;
+    img {
+      position: absolute;
+      right: 25%;
+      bottom: 25%;
+    }
+  }
+  .l-right {
+    margin-left: auto;
+    margin-right: 10px;
+    display: flex;
+  }
+  .c-btn {
+    margin: 0 10px;
   }
 }
 
