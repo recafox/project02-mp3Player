@@ -1,4 +1,3 @@
-// import hello from './hello.js'
 // import Button from './component/Button/button.js';
 // import Heading from './component/Heading/heading.js'
 import MusicPlayer from './component/MusicPlayer.js';
