@@ -10,6 +10,7 @@
 </head>
 <body>
   <div class="l-container  current--player js-container">
+    <img class="container__bg js-player-bg"></img>
     {{!-- <div class="alert">
       <p>請使用開發者工具切換至手機模式使用</p>
     </div> --}}
@@ -20,7 +21,7 @@
         <img class="js-list-btn" data-to="list" src="./assets/icon/ic_menu.png" alt="prev">
       </div>
       <div class="l-right">
-        <div class="c-btn">
+        <div class="c-btn icon-btn">
           <img class="js-player-btn" data-to="player" src="./assets/icon/ic_record.png" alt="prev">
         </div>
         <div class="c-btn">
@@ -82,18 +83,21 @@
         </button>
       </div>
       <div class="l-panel__btn-group group--center">
-        <button class="c-btn js-repeat-btn" data-action="repeatOne">
-          <img src="./assets/icon/ic_repeatone.png" alt="repeatOne">
+        <button class="c-btn btn--repeat js-mode-btn" data-playMode="repeatOne">
+          <img class="img" src="./assets/icon/ic_repeatone.png" alt="repeatOne">
+          <img class="img--active" src="./assets/icon/ic_repeatone_act.png" alt="repeatOne">
         </button>
-        <button class="c-btn js-loop-btn" data-action="loop">
-          <img src="./assets/icon/ic_loop.png" alt="loop">
+        <button class="c-btn btn--loop js-mode-btn" data-playMode="loop">
+          <img class="img" src="./assets/icon/ic_loop.png" alt="loop">
+          <img class="img--active" src="./assets/icon/ic_loop_act.png" alt="loop">
         </button>
-        <button class="c-btn js-random-btn" data-action="random">
-          <img src="./assets/icon/ic_random.png" alt="random">
+        <button class="c-btn btn--random js-mode-btn is--current" data-playMode="random">
+          <img class="img" src="./assets/icon/ic_random.png" alt="random">
+          <img class="img--active" src="./assets/icon/ic_random_act.png" alt="random">
         </button>
       </div>
       <div class="c-progress js-progress-bar">
-        <div class="progress__bar">
+        <div class="progress__bar js-bar">
           <div class="progress__point"></div>
         </div>
       </div>
