@@ -4,6 +4,7 @@ class MusicPlayer {
   constructor (playlist) {
     this.isPlaying = false;
     this.playlist = playlist;
+    this.currentPlaylist = playlist;
     this.currentTrack = null;
     this.audioEl = new Audio();
     this.progressTimer = null;
@@ -26,7 +27,7 @@ class MusicPlayer {
 
     // playlist
     this.randomList = this.shuffleArray(this.playlist);
-    this.singleList = null;
+    this.repeatOneList = [this.currentTrack];
     this.loopList = this.playlist;
 
     // default mode
@@ -44,6 +45,40 @@ class MusicPlayer {
     let img = Array.from(that.playBtn.childNodes).filter(child => child.tagName === 'IMG')[0];
     img.src = "./assets/icon/ic_pause.png";
     that.updateProgressBar();
+  }
+
+  playNext () {
+    const that = this;
+    function getNextSongId () {
+      for (let i = 0; i < that.currentPlaylist.length; i++) {
+        if (that.currentPlaylist[i].id === that.currentTrack.id) {
+          if (that.currentPlaylist[i + 1] !== undefined) {
+            return that.currentPlaylist[i + 1].id;
+          } else {
+            return that.currentPlaylist[0].id;
+          }
+        }
+      }
+    }
+    that.setTrack(getNextSongId());
+    that.playTrack();
+  }
+
+  playPrev () {
+    const that = this;
+    function getPrevSongId () {
+      for (let i = 0; i < that.currentPlaylist.length; i++) {
+        if (that.currentPlaylist[i].id === that.currentTrack.id) {
+          if (that.currentPlaylist[i - 1] !== undefined) {
+            return that.currentPlaylist[i - 1].id;
+          } else {
+            return that.currentPlaylist[that.currentPlaylist.length - 1].id;
+          }
+        }
+      }
+    }
+    that.setTrack(getPrevSongId());
+    that.playTrack();
   }
   setTrackCurrentTime (time) {
     const that = this;
@@ -83,8 +118,12 @@ class MusicPlayer {
   }
 
   setTrack (songID) {
+    console.log(songID);
     this.currentTrack = this.getTrack(songID);
     this.audioEl.src = this.currentTrack.path;
+    this.audioEl.currentTime = 0;
+    this.updateProgressBar();
+    this.stopTrack();
     this.setCoverArt(this.currentTrack);
     this.setTrackInfo(this.currentTrack);
     this.setCurrentItem(songID);
@@ -94,8 +133,6 @@ class MusicPlayer {
   getTrack (songID) {
     return this.playlist.find(song => parseInt(song.id) === parseInt(songID));
   }
-
-
   
   setCoverArt (song) {
     this.cover.src = song.art;
@@ -138,7 +175,20 @@ class MusicPlayer {
   }
   
   setPlayMode (mode) {
-    console.log("set play mode", mode);
+    const that = this;
+    switch(mode) {
+      case 'loop':
+        that.currentPlaylist = that.playlist;
+        break;
+      case 'random':
+        that.currentPlaylist = that.shuffleArray(that.playlist);
+        break;
+      case 'repeatOne':
+        that.currentPlaylist = [that.currentTrack];
+        break;
+      default:
+        break;
+    }
   }
 
   // random playlist
@@ -160,7 +210,10 @@ class MusicPlayer {
   initialize () {
     let that = this;
     that.createList();
-    that.setTrack(that.playlist[0].id);
+    that.setPlayMode('loop');
+    that.setTrack(that.currentPlaylist[0].id);
+    that.audioEl.currentTime = 0;
+    that.updateProgressBar();
 
 
 
@@ -195,7 +248,6 @@ class MusicPlayer {
 
     // progress bar
     that.progressBar.addEventListener('mousedown', function (e) {
-      let mousePos = e.offsetX;
       let totalLen = that.progressBar.offsetWidth;
       let newCurrentTime = (e.offsetX / totalLen) * that.audioEl.duration;
       that.setTrackCurrentTime(newCurrentTime);
@@ -206,8 +258,26 @@ class MusicPlayer {
     let modeBtns = Array.from(document.querySelectorAll('.js-mode-btn'));
     modeBtns.forEach(function (btn) {
       btn.addEventListener('click', function (e) {
+        modeBtns.forEach(function (btn) {
+          btn.classList.remove('is--current');
+        });
+        btn.classList.add('is--current');
         that.setPlayMode(this.dataset.playmode);
       })
+    });
+
+    // play next & play prev
+    that.nextBtn.addEventListener('click', function (e) {
+      that.playNext();
+    });
+
+    that.prevBtn.addEventListener('click', function(e) {
+      that.playPrev();
+    });
+
+    // song is over
+    that.audioEl.addEventListener('ended', function () {
+      that.playNext();
     })
 
   }
