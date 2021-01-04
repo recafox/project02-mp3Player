@@ -35,7 +35,6 @@ let initialize = function () {
     .then(response => response.json())
     .then(jsonData => {
       playlist = jsonData;
-      console.log(playlist);
       // do something ...
       let player = new MusicPlayer(playlist);
       player.initialize();

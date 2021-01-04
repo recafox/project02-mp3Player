@@ -1,4 +1,5 @@
 import getNode from '../util.js';
+import Teleprompter from './Teleprompter.js';
 
 class MusicPlayer {
   constructor (playlist) {
@@ -118,7 +119,6 @@ class MusicPlayer {
   }
 
   setTrack (songID) {
-    console.log(songID);
     this.currentTrack = this.getTrack(songID);
     this.audioEl.src = this.currentTrack.path;
     this.audioEl.currentTime = 0;
@@ -127,6 +127,10 @@ class MusicPlayer {
     this.setCoverArt(this.currentTrack);
     this.setTrackInfo(this.currentTrack);
     this.setCurrentItem(songID);
+
+    let prompter = new Teleprompter(this.currentTrack.lyrics, this.currentTrack.name, getNode('.js-lyrics-container'));
+  
+    
   }
 
 
@@ -278,7 +282,8 @@ class MusicPlayer {
     // song is over
     that.audioEl.addEventListener('ended', function () {
       that.playNext();
-    })
+    });
+
 
   }
 }
