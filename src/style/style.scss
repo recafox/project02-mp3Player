@@ -328,6 +328,13 @@ $menu-btn: 30px;
     font-weight: bold;
     letter-spacing: 1px;
   }
+  .lyrics__wrapper {
+    overflow: hidden;
+  }
+  .lyrics__list {
+    position: relative;
+    transition: all 0.2s ease;
+  }
   p {
     margin-bottom: 10px;
     line-height: 1.5;

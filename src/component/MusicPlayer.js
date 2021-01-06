@@ -34,10 +34,24 @@ class MusicPlayer {
     // default mode
     this.playMode = 'loop'; // single loop, loop, random
 
+    // prompter
+    this.prompter = null;
+
 
 
   }
+  setTrack (songID) {
+    this.currentTrack = this.getTrack(songID);
+    this.audioEl.src = this.currentTrack.path;
+    this.audioEl.currentTime = 0;
+    this.updateProgressBar();
+    this.stopTrack();
+    this.setCoverArt(this.currentTrack);
+    this.setTrackInfo(this.currentTrack);
+    this.setCurrentItem(songID);
 
+    this.prompter = new Teleprompter(this.currentTrack.lyrics, this.currentTrack.name, getNode('.js-lyrics-container'));
+  }
 
   playTrack () {
     const that = this;
@@ -46,6 +60,10 @@ class MusicPlayer {
     let img = Array.from(that.playBtn.childNodes).filter(child => child.tagName === 'IMG')[0];
     img.src = "./assets/icon/ic_pause.png";
     that.updateProgressBar();
+
+    if (that.prompter) {
+      that.prompter.start();
+    }
   }
 
   playNext () {
@@ -108,6 +126,9 @@ class MusicPlayer {
     img.src = "./assets/icon/ic_play.png";
     that.audioEl.pause();
     that.stopProgressBar();
+    if (that.prompter) {
+      that.prompter.stop();
+    }
   }
 
   getTrackCurrentTime () {
@@ -118,20 +139,6 @@ class MusicPlayer {
     return this.audioEl.duration;
   }
 
-  setTrack (songID) {
-    this.currentTrack = this.getTrack(songID);
-    this.audioEl.src = this.currentTrack.path;
-    this.audioEl.currentTime = 0;
-    this.updateProgressBar();
-    this.stopTrack();
-    this.setCoverArt(this.currentTrack);
-    this.setTrackInfo(this.currentTrack);
-    this.setCurrentItem(songID);
-
-    let prompter = new Teleprompter(this.currentTrack.lyrics, this.currentTrack.name, getNode('.js-lyrics-container'));
-  
-    
-  }
 
 
   getTrack (songID) {

@@ -1,19 +1,28 @@
 class Teleprompter {
   constructor(lyrics, songName, container) {
+    this.container = container;
     this.lyricMap = this.parseLyric(lyrics);
-    this.lyricsList = Array.from(container.children).filter(child => child.className.includes('js-lyrics-list'))[0];
+    this.lyricsWrapper = Array.from(container.children).filter(child => child.className.includes('js-lyrics-wrapper'))[0];
+    this.lyricsList = Array.from(this.lyricsWrapper.children).filter(child => child.className.includes('js-lyrics-list'))[0];
     this.titleNode = Array.from(container.children).filter(child => child.className.includes('js-lyrics-title'))[0];
-
+    this.intervalId = undefined;
+    this.currentTime = 0;
+    this.isCounting = false;
+    this.currentPlaying = "";
+    this.activeClassName = 'is--current';
+    this.offset = 30;
     this.reset();
     this.setTitle(songName);
     this.render();
+    // this.convertToMilliSec("02:25.49");
     
   }
   parseLyric (lyrics) {
+    const that = this;
     let raw = lyrics.split("");
     let i = 0;
     let max = raw.length;
-    let key = "";
+    let key = undefined;
     let value = "";
     let map = {};
     let insideBrackets = true;
@@ -23,6 +32,7 @@ class Teleprompter {
         key = "";
       } else if (raw[i] === ']') {
         insideBrackets = false;
+        key = Math.floor(that.convertToMilliSec(key));
         map[key] = {
           value: "",
         };
@@ -33,11 +43,18 @@ class Teleprompter {
       }
 
       if (insideBrackets === false && raw[i] !== '[' && raw[i] !== ']' && raw[i]) {
-        map[key].value += `${raw[i]}`;
+        let content = `${raw[i]}`;
+        map[key].value += content;
       }
       i++;
     }
     return map;
+  }
+  // 02:25.49 => 100 * 60 * 20 + 100 * 25 + 49
+  convertToMilliSec (timeStr) {
+    let min = parseInt(timeStr.split(":")[0], 10);
+    let sec = parseFloat(timeStr.split(":")[1]);
+    return min * 100 * 60 + sec * 100;
   }
   render() {
     const that = this;
@@ -50,7 +67,51 @@ class Teleprompter {
   createLyricTmpl (lyric, time) {
     return `<p data-time="${time}">${lyric}</p>`;
   }
-
+  start () {
+    const that = this;
+    that.isCounting = true;
+    console.log('prompter starts');
+    that.intervalId = window.setInterval(function() {
+      that.currentTime ++;
+      for (let key in that.lyricMap) {
+        if (Math.ceil(key) === that.currentTime) {
+          that.clear();
+          that.updateCurrent();
+        }
+      }
+    }, 10);
+  }
+  stop () {
+    const that = this;
+    console.log('prompter stops');
+    that.isCounting = false;
+    window.clearInterval(that.intervalId);
+  }
+  updateCurrent(lyric) {
+    const that = this;
+    let allSentences = Array.from(that.container.querySelectorAll('p'));
+    let current = allSentences.find(sentence => parseInt(sentence.dataset.time) === that.currentTime);
+    if (current) {
+      current.classList.add(that.activeClassName);
+      let pos = current.getBoundingClientRect().top;
+      let windowHeight = window.innerHeight;
+      if (pos > windowHeight / 5) {
+        let prevPos = isNaN(parseInt(that.lyricsList.style.top.replace("px", "").trim(), 10)) ? 0 : parseInt(that.lyricsList.style.top.replace("px", "").trim(), 10);
+        that.lyricsList.style.top = `${prevPos - that.offset}px`;
+      } else {
+        that.lyricsList.style.top = '0px';
+      }
+    }
+  }
+  clear () {
+    const that = this;
+    let allLyrics = Array.from(that.container.querySelectorAll('p'));
+    let prev = allLyrics.find(lyric => lyric.classList.contains(that.activeClassName));
+    if (prev) {
+      prev.classList.remove(that.activeClassName);
+    }
+    
+  }
   reset () {
     const that = this;
     that.titleNode.innerText = "";
@@ -59,9 +120,6 @@ class Teleprompter {
   setTitle (title) {
     const that = this;
     that.titleNode.innerText = title;
-  }
-  updateCurrent() {
-
   }
   
 }
