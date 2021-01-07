@@ -62,7 +62,7 @@ class MusicPlayer {
     that.updateProgressBar();
 
     if (that.prompter) {
-      that.prompter.start();
+      that.prompter.start(that.audioEl.currentTime);
     }
   }
 
@@ -101,7 +101,9 @@ class MusicPlayer {
   }
   setTrackCurrentTime (time) {
     const that = this;
+    that.stopTrack();
     that.audioEl.currentTime = time;
+    that.playTrack();
   }
   updateProgressBar () {
     const that = this;
@@ -288,6 +290,7 @@ class MusicPlayer {
 
     // song is over
     that.audioEl.addEventListener('ended', function () {
+      that.prompter.removeAll();
       that.playNext();
     });
 
