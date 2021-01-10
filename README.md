@@ -1,7 +1,7 @@
 # Project02-Mp3player
 a simple mp3 player for mobile devices
 
-[DEMO(https://recafox.github.io/Project02-Mp3player/)
+[DEMO](https://recafox.github.io/Project02-Mp3player/)
 
 功能:
 1. 撥放清單點擊播放, 上一首/下一首
