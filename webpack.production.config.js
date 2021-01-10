@@ -173,7 +173,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       // insert these values into template as htmlwebpackplugin.options. xxx
       // xxx: value
-      title: 'Hello Webpack!!',
+      title: 'mp3 player',
       template: './src/index.hbs',
       description: "a description for webpack!"
     

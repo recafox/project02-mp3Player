@@ -73,15 +73,17 @@ class Teleprompter {
   start (time) {
     const that = this;
     that.isCounting = true;
-    that.clear();
-    that.updateCurrent(that.getNearest(time.toFixed(2) * 100));
+    if (time > 0) {
+      that.clear();
+      that.updateCurrent(that.getNearest(time.toFixed(2) * 100));
+    }
     that.currentTime = time.toFixed(2) * 100;
     that.intervalId = window.setInterval(function() {
       that.currentTime ++;
       for (let key in that.lyricMap) {
-        if (Math.ceil(key) === parseInt(that.currentTime)) {
+        if (Math.ceil(key) === that.currentTime) {
           that.clear();
-          that.updateCurrent(parseInt(that.currentTime));
+          that.updateCurrent(that.currentTime);
         }
       }
     }, 10);
